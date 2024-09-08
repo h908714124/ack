@@ -9,9 +9,9 @@ int max(int a, int b) {
 int ackermann(long m, long n) {
   long next[m + 1];
   long goal[m + 1];
-  for (int s = 0; s < m; s++) {
-    next[s] = 0;
-    goal[s] = 1;
+  for (int i = 0; i < m; i++) {
+    next[i] = 0;
+    goal[i] = 1;
   }
   next[m] = 0;
   goal[m] = -1;
