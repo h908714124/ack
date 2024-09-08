@@ -40,7 +40,7 @@ int stackermann(long mm, long nn) {
     long n = stack[length - 1];
     #ifdef DEBUG
     for (int i = 0; i < length; i++) {
-      printf("%d ", stack[i]);
+      printf("%ld ", stack[i]);
     }
     printf("\n");
     #endif
@@ -77,15 +77,15 @@ int main(int argc, char **argv) {
   long m = strtol(argv[1], &end, 10);
   long n = strtol(argv[2], &end, 10);
   if (m >= 4 && n >= 2) {
-    printf("ack(%d, %d) may take a _very_ long time to compute.\n", m, n);
+    printf("ack(%ld, %ld) may take a _very_ long time to compute.\n", m, n);
     printf("Try with smaller values, or press Return to continue.\n");
     char buf[10];
     fgets(buf, 10, stdin);
   }
   long result = ackermann(m, n);
-  printf("ackermann(%d, %d) = %d\n", m, n, result);
+  printf("ackermann(%ld, %ld) = %ld\n", m, n, result);
 //  result = stackermann(m, n);
-//  printf("stackermann(%d, %d) = %d\n", m, n, result);
+//  printf("stackermann(%ld, %ld) = %ld\n", m, n, result);
   return 0;
 }
 
