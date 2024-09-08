@@ -2,10 +2,6 @@
 #include <stdlib.h>
 #include <stdbool.h>
 
-int max(int a, int b) {
-  return a < b ? b : a;
-}
-
 int ackermann(long m, long n) {
   long next[m + 1];
   long goal[m + 1];
@@ -81,4 +77,8 @@ int main(int argc, char **argv) {
 //  result = stackermann(m, n);
 //  printf("stackermann(%d, %d) = %d\n", m, n, result);
   return 0;
+}
+
+int max(int a, int b) {
+  return a < b ? b : a;
 }
