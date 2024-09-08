@@ -13,17 +13,25 @@ int ackermann(long m, long n) {
   goal[m] = -1;
   do {
     long value = next[0] + 1;
-    bool transferring = true;
-    int mm = 0;
-    while (transferring) {
-      if (next[mm] == goal[mm]) {
-        goal[mm] = value;
-      } else {
-        transferring = false;
+    for (int i = 0; i <= m; i++) {
+      int ni = next[i];
+      next[i]++;
+      if (ni != goal[i]) {
+        break;
       }
-      next[mm]++;
-      mm++;
+      goal[i] = value;
     }
+    #ifdef DEBUG
+    printf("next: ");
+    for (int i = 0; i <= m; i++) {
+      printf("%ld ", next[i]);
+    }
+    printf(", goal: ");
+    for (int i = 0; i <= m; i++) {
+      printf("%ld ", goal[i]);
+    }
+    printf("\n");
+    #endif
   } while (next[m] != n + 1);
   return next[0];
 }
