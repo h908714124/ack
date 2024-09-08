@@ -70,8 +70,18 @@ int stackermann(long mm, long nn) {
 
 int main(int argc, char **argv) {
   char* end;
+  if (argc != 3) {
+    printf("Expecting two arguments but found %d\n", argc - 1);
+    return 1;
+  }
   long m = strtol(argv[1], &end, 10);
   long n = strtol(argv[2], &end, 10);
+  if (m >= 4 && n >= 2) {
+    printf("ack(%d, %d) may take a _very_ long time to compute.\n", m, n);
+    printf("Try with smaller values, or press Return to continue.\n");
+    char buf[10];
+    fgets(buf, 10, stdin);
+  }
   long result = ackermann(m, n);
   printf("ackermann(%d, %d) = %d\n", m, n, result);
 //  result = stackermann(m, n);
