@@ -3,19 +3,17 @@
 #include <stdbool.h>
 
 int ackermann(long m, long n) {
-  long next[m + 1];
-  long goal[m + 1];
+  long next[m];
+  long goal[m];
   for (int i = 0; i < m; i++) {
     next[i] = 0;
     goal[i] = 1;
   }
-  next[m] = 0;
-  goal[m] = -1;
-  next[0] = 1;
+  goal[m - 1] = -1;
   long value = 1;
   do {
     value++;
-    for (int i = 1; i <= m; i++) {
+    for (int i = 0; i < m; i++) {
       int ni = next[i];
       next[i]++;
       if (ni != goal[i]) {
@@ -25,16 +23,16 @@ int ackermann(long m, long n) {
     }
     #ifdef DEBUG
     printf("next: ");
-    for (int i = 0; i <= m; i++) {
+    for (int i = 0; i < m; i++) {
       printf("%ld ", next[i]);
     }
     printf(", goal: ");
-    for (int i = 0; i <= m; i++) {
+    for (int i = 0; i < m; i++) {
       printf("%ld ", goal[i]);
     }
     printf("\n");
     #endif
-  } while (next[m] != n + 1);
+  } while (next[m - 1] != n + 1);
   return value;
 }
 
