@@ -1,6 +1,5 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <stdbool.h>
 
 void logDebug(long state[], long goal[], long value, int m);
 
