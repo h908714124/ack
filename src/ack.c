@@ -2,101 +2,61 @@
 #include <stdlib.h>
 #include <stdbool.h>
 
+void logDebug(long state[], long goal[], long value, int m);
+
 int ackermann(long m, long n) {
-  long next[m];
-  long goal[m];
-  for (int i = 0; i < m; i++) {
-    next[i] = 0;
+  long state[m], goal[m - 1];
+  for (int i = 0; i < m - 1; i++) {
+    state[i] = 0;
     goal[i] = 1;
   }
-  goal[m - 1] = -1;
+  state[m - 1] = 0;
   long value = 1;
-  do {
+  logDebug(state, goal, value, m);
+  while (state[m - 1] != n + 1) {
     value++;
     for (int i = 0; i < m; i++) {
-      int ni = next[i];
-      next[i]++;
-      if (ni != goal[i]) {
+      if (state[i]++ != goal[i]) {
         break;
       }
-      goal[i] = value;
+      if (i != m - 1) {
+        goal[i] = value;
+      }
     }
-    #ifdef DEBUG
-    printf("next: ");
-    for (int i = 0; i < m; i++) {
-      printf("%ld ", next[i]);
-    }
-    printf(", goal: ");
-    for (int i = 0; i < m; i++) {
-      printf("%ld ", goal[i]);
-    }
-    printf("\n");
-    #endif
-  } while (next[m - 1] != n + 1);
+    logDebug(state, goal, value, m);
+  }
   return value;
 }
 
-int stackermann(long mm, long nn) {
-  int length = 2;
-  int size = 120000 * mm;
-  int maxstack = 2;
-  long stack[size];
-  stack[0] = mm;
-  stack[1] = nn;
-  while (length != 1) {
-    long m = stack[length - 2];
-    long n = stack[length - 1];
-    #ifdef DEBUG
-    for (int i = 0; i < length; i++) {
-      printf("%ld ", stack[i]);
-    }
-    printf("\n");
-    #endif
-    if (m == 0) {
-      stack[length - 2] = n + 1;
-      length--;
-    } else if (n == 0) {
-      stack[length - 2] = m - 1;
-      stack[length - 1] = 1;
-    } else {
-      stack[length - 2] = m - 1;
-      stack[length - 1] = m;
-      stack[length] = n - 1;
-      length++;
-      if (length == size) {
-        printf("stack overflow\n");
-        return -1;
-      }
-      if (length > maxstack) {
-        maxstack = length;
-      }
-    }
+void logDebug(long *state, long *goal, long value, int m) {
+  #ifdef DEBUG
+  printf("%ld   state: ", value);
+  for (int i = 0; i < m; i++) {
+    printf("%ld ", state[i]);
   }
-  printf("max stack: %d\n", maxstack);
-  return stack[0];
+  printf("  goal: ");
+  for (int i = 0; i < m - 1; i++) {
+    printf("%ld ", goal[i]);
+  }
+  printf("\n");
+  #endif
 }
 
 int main(int argc, char **argv) {
   char* end;
   if (argc != 3) {
-    printf("Expecting two arguments but found %d\n", argc - 1);
+    printf("Expecting 2 arguments but found %d\n", argc - 1);
     return 1;
   }
   long m = strtol(argv[1], &end, 10);
   long n = strtol(argv[2], &end, 10);
   if (m >= 4 && n >= 2) {
     printf("ack(%ld, %ld) may take a _very_ long time to compute.\n", m, n);
-    printf("Try with smaller values, or press Return to continue.\n");
+    printf("Try with smaller values, or press Return to continue anyway.\n");
     char buf[10];
     fgets(buf, 10, stdin);
   }
   long result = ackermann(m, n);
   printf("ackermann(%ld, %ld) = %ld\n", m, n, result);
-//  result = stackermann(m, n);
-//  printf("stackermann(%ld, %ld) = %ld\n", m, n, result);
   return 0;
-}
-
-int max(int a, int b) {
-  return a < b ? b : a;
 }
