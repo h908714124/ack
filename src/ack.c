@@ -11,8 +11,9 @@ int ackermann(long m, long n) {
   }
   next[m] = 0;
   goal[m] = -1;
+  long value = 0;
   do {
-    long value = next[0] + 1;
+    value++;
     for (int i = 0; i <= m; i++) {
       int ni = next[i];
       next[i]++;
@@ -33,7 +34,7 @@ int ackermann(long m, long n) {
     printf("\n");
     #endif
   } while (next[m] != n + 1);
-  return next[0];
+  return value;
 }
 
 int stackermann(long mm, long nn) {
