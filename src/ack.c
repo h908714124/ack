@@ -11,10 +11,11 @@ int ackermann(long m, long n) {
   }
   next[m] = 0;
   goal[m] = -1;
-  long value = 0;
+  next[0] = 1;
+  long value = 1;
   do {
     value++;
-    for (int i = 0; i <= m; i++) {
+    for (int i = 1; i <= m; i++) {
       int ni = next[i];
       next[i]++;
       if (ni != goal[i]) {

@@ -8,7 +8,7 @@ build-debug: create-dist
 	gcc -DDEBUG -o dist/ack src/ack.c
 
 run: build
-	dist/ack 4 1
+	dist/ack 3 2
 
 debug: build-debug
-	dist/ack 4 1
+	dist/ack 3 2
