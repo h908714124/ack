@@ -14,5 +14,5 @@ Verbose / print intermediate steps:
 
 ```
 make build-verbose
-dist/ack 4 1
+dist/ack 4 2 | less
 ```
