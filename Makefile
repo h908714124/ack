@@ -4,11 +4,11 @@ create-dist:
 build: create-dist
 	gcc -o dist/ack src/ack.c
 
-build-debug: create-dist
+build-verbose: create-dist
 	gcc -DDEBUG -o dist/ack src/ack.c
 
 run: build
 	dist/ack 3 2
 
-debug: build-debug
+debug: build-verbose
 	dist/ack 3 2
