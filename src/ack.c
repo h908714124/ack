@@ -30,13 +30,13 @@ int ackermann(uint64_t m, uint64_t n) {
 
 void logDebug(uint64_t *counters, uint64_t *goals, uint64_t value, int m) {
   #ifdef DEBUG
-  printf("%d   counters: ", value);
+  printf("%llu   counters: ", value);
   for (int i = 0; i < m; i++) {
-    printf("%d ", counters[i]);
+    printf("%llu ", counters[i]);
   }
   printf("  goals: ");
   for (int i = 0; i < m - 1; i++) {
-    printf("%d ", goals[i]);
+    printf("%llu ", goals[i]);
   }
   printf("\n");
   #endif
@@ -51,6 +51,6 @@ int main(int argc, char **argv) {
   uint64_t m = strtol(argv[1], &end, 10);
   uint64_t n = strtol(argv[2], &end, 10);
   uint64_t result = ackermann(m, n);
-  printf("ackermann(%d, %d) = %d\n", m, n, result);
+  printf("ackermann(%llu, %llu) = %d\n", m, n, result);
   return 0;
 }
