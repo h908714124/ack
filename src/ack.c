@@ -1,56 +1,37 @@
 #include <stdio.h>
-#include <stdlib.h>
 #include <stdint.h>
 
-void logDebug(uint64_t counters[], uint64_t goals[], uint64_t value, int m);
+void logDebug(uint64_t counters[], uint64_t goals[], uint64_t value);
 
-int ackermann(uint64_t m, uint64_t n) {
-  uint64_t counters[m], goals[m - 1];
-  for (int i = 0; i < m - 1; i++) {
+int main() {
+  uint64_t counters[6], goals[6];
+  for (int i = 0; i < 6; i++) {
     counters[i] = 0;
     goals[i] = 1;
   }
-  counters[m - 1] = 0;
   uint64_t value = 1;
-  logDebug(counters, goals, value, m);
-  while (counters[m - 1] != n + 1) {
+  logDebug(counters, goals, value);
+  while (1) {
     value++;
-    for (int i = 0; i < m; i++) {
+    for (int i = 0; i < 6; i++) {
       if (counters[i]++ != goals[i]) {
         break;
       }
-      if (i != m - 1) {
-        goals[i] = value;
-      }
+      goals[i] = value;
     }
-    logDebug(counters, goals, value, m);
+    logDebug(counters, goals, value);
   }
-  return value;
+  return 0;
 }
 
-void logDebug(uint64_t *counters, uint64_t *goals, uint64_t value, int m) {
-  #ifdef DEBUG
+void logDebug(uint64_t *counters, uint64_t *goals, uint64_t value) {
   printf("%llu   counters: ", value);
-  for (int i = 0; i < m; i++) {
+  for (int i = 0; i < 6; i++) {
     printf("%llu ", counters[i]);
   }
   printf("  goals: ");
-  for (int i = 0; i < m - 1; i++) {
+  for (int i = 0; i < 6; i++) {
     printf("%llu ", goals[i]);
   }
   printf("\n");
-  #endif
-}
-
-int main(int argc, char **argv) {
-  char* end;
-  if (argc != 3) {
-    printf("Expecting 2 arguments but found %d\n", argc - 1);
-    return 1;
-  }
-  uint64_t m = strtol(argv[1], &end, 10);
-  uint64_t n = strtol(argv[2], &end, 10);
-  uint64_t result = ackermann(m, n);
-  printf("ackermann(%llu, %llu) = %d\n", m, n, result);
-  return 0;
 }
