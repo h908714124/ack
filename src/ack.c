@@ -2,8 +2,9 @@
 #include <termios.h>
 #include <unistd.h>
 #include <stdint.h>
+#include <curses.h>
 
-void logDebug(uint64_t counters[], uint64_t goals[], uint64_t value);
+void printRow(uint64_t counters[], uint64_t goals[], uint64_t value);
 
 void increment(uint64_t *counters, uint64_t *goals, uint64_t value) {
   for (int i = 0; i < 6; i++) {
@@ -26,41 +27,43 @@ void decrement(uint64_t *counters, uint64_t *goals, uint64_t value) {
 
 int main() {
   char c;
-  static struct termios oldt, newt;
-  tcgetattr( STDIN_FILENO, &oldt);
-  newt = oldt;
-  newt.c_lflag &= ~(ICANON | ECHO);
-  tcsetattr( STDIN_FILENO, TCSANOW, &newt);
+  initscr();
+  clear();
+  refresh();
   uint64_t counters[6], goals[6];
   for (int i = 0; i < 6; i++) {
     counters[i] = 0;
     goals[i] = 1;
   }
   uint64_t value = 1;
-  logDebug(counters, goals, value);
+  printRow(counters, goals, value);
   while (1) {
+    printRow(counters, goals, value);
     scanf("%c", &c);
     if (c == 'j') {
       value++;
       increment(counters, goals, value);
-      logDebug(counters, goals, value);
-    } else if (value != 1 && c == 'k') {
+    } else if (c == 'k' && value != 1) {
       decrement(counters, goals, value);
       value--;
-      logDebug(counters, goals, value);
+    } else if (c == 'q') {
+      break;
     }
   }
+  endwin();
   return 0;
 }
 
-void logDebug(uint64_t *counters, uint64_t *goals, uint64_t value) {
-  printf("%llu   counters: ", value);
+void printRow(uint64_t *counters, uint64_t *goals, uint64_t value) {
+  clear();
+  printw("%llu   counters: ", value);
   for (int i = 0; i < 6; i++) {
-    printf("%llu ", counters[i]);
+    printw("%llu ", counters[i]);
   }
-  printf("  goals: ");
+  printw("  goals: ");
   for (int i = 0; i < 6; i++) {
-    printf("%llu ", goals[i]);
+    printw("%llu ", goals[i]);
   }
-  printf("\n");
+  printw("\n");
+  refresh();
 }
