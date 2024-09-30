@@ -137,9 +137,6 @@ void printScreen(uint64_t *counters, uint64_t *goals, uint64_t value) {
     if (i == 0) {
       printw("  goals: ");
       for (int i = 0; i < MAX_ACK; i++) {
-        if (goals[i] == 1) {
-          break;
-        }
         if (match == 1 && goals[i] == counters[i]) {
           attron(COLOR_PAIR(2));
           printw("%llu ", goals[i]);
@@ -150,6 +147,9 @@ void printScreen(uint64_t *counters, uint64_t *goals, uint64_t value) {
         printw("%llu ", goals[i]);
         attroff(COLOR_PAIR(1));
         match = 0;
+        if (i != 0 && goals[i] == 1) {
+          break;
+        }
       }
     }
     printw("\n");
