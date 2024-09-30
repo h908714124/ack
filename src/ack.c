@@ -32,44 +32,77 @@ int main() {
   char c;
   initscr();
   curs_set(0);
+  int col, row;
+  getmaxyx(stdscr, row, col);
   uint64_t counters[MAX_ACK], goals[MAX_ACK];
+  uint64_t scrollsize = row / 2;
+  uint64_t input = 0;
   for (int i = 0; i < MAX_ACK; i++) {
     counters[i] = 0;
     goals[i] = 1;
   }
   uint64_t value = 1;
   printScreen(counters, goals, value);
-  while (1) {
+  outer: while (1) {
     scanf("%c", &c);
-    if (c == 'j') {
-      value++;
-      increment(counters, goals, value);
-      printScreen(counters, goals, value);
-    } else if (c == 'k' && value != 1) {
-      decrement(counters, goals, value);
-      value--;
-      printScreen(counters, goals, value);
-    } else if (c == 'u') {
-      for (int i = 0; i < 20; i++) {
-        if (value == 1) {
-          break;
-        }
-        decrement(counters, goals, value);
-        value--;
-      }
-      printScreen(counters, goals, value);
-    } else if (c == 'd') {
-      for (int i = 0; i < 20; i++) {
+    switch (c) {
+      case '0':
+      case '1':
+      case '2':
+      case '3':
+      case '4':
+      case '5':
+      case '6':
+      case '7':
+      case '8':
+      case '9':
+        input *= 10;
+        input += (c - '0');
+        break;
+      case 'j':
         value++;
         increment(counters, goals, value);
-      }
-      printScreen(counters, goals, value);
-    } else if (c == 'q') {
-      break;
+        printScreen(counters, goals, value);
+        input = 0;
+        break;
+      case 'k':
+        if (value != 1) {
+          decrement(counters, goals, value);
+          value--;
+          printScreen(counters, goals, value);
+        }
+        input = 0;
+        break;
+      case 'u':
+        if (input != 0) {
+          scrollsize = input;
+        }
+        for (int i = 0; i < scrollsize; i++) {
+          if (value == 1) {
+            break;
+          }
+          decrement(counters, goals, value);
+          value--;
+        }
+        printScreen(counters, goals, value);
+        input = 0;
+        break;
+      case 'd':
+        if (input != 0) {
+          scrollsize = input;
+        }
+        for (int i = 0; i < scrollsize; i++) {
+          value++;
+          increment(counters, goals, value);
+        }
+        printScreen(counters, goals, value);
+        input = 0;
+        break;
+      case 'q':
+        endwin();
+        return 0;
     }
   }
-  endwin();
-  return 0;
 }
 
 void printRow(uint64_t *counters, uint64_t *goals, uint64_t value) {
