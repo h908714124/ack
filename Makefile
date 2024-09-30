@@ -1,3 +1,5 @@
+default: build
+
 create-dist:
 	test -d dist || mkdir -p dist
 
