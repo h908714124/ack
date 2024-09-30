@@ -31,6 +31,9 @@ void decrement(uint64_t *counters, uint64_t *goals, uint64_t value) {
 int main() {
   char c;
   initscr();
+  start_color();
+  init_pair(1, COLOR_RED, COLOR_BLACK);
+  init_pair(2, COLOR_GREEN, COLOR_BLACK);
   curs_set(0);
   int col, row;
   getmaxyx(stdscr, row, col);
@@ -105,15 +108,17 @@ int main() {
   }
 }
 
+void printArray(uint64_t *ar) {
+  for (int i = 0; i < MAX_ACK; i++) {
+    printw("%llu ", ar[i]);
+  }
+}
+
 void printRow(uint64_t *counters, uint64_t *goals, uint64_t value) {
   printw("%llu   counters: ", value);
-  for (int i = 0; i < MAX_ACK; i++) {
-    printw("%llu ", counters[i]);
-  }
+  printArray(counters);
   printw("  goals: ");
-  for (int i = 0; i < MAX_ACK; i++) {
-    printw("%llu ", goals[i]);
-  }
+  printArray(goals);
   printw("\n");
 }
 
@@ -123,13 +128,33 @@ void printScreen(uint64_t *counters, uint64_t *goals, uint64_t value) {
   memcpy(goalsCopy, goals, MAX_ACK * sizeof(uint64_t));
   memcpy(countersCopy, counters, MAX_ACK * sizeof(uint64_t));
   clear();
-  printRow(countersCopy, goalsCopy, value);
   int col, row;
   getmaxyx(stdscr, row, col);
-  for (int i = 1; i < row; i++) {
+  for (int i = 0; i < row; i++) {
+    printw("%llu   counters: ", value);
+    printArray(countersCopy);
+    int match = 1;
+    if (i == 0) {
+      printw("  goals: ");
+      for (int i = 0; i < MAX_ACK; i++) {
+        if (goals[i] == 1) {
+          break;
+        }
+        if (match == 1 && goals[i] == counters[i]) {
+          attron(COLOR_PAIR(2));
+          printw("%llu ", goals[i]);
+          attroff(COLOR_PAIR(2));
+          continue;
+        }
+        attron(COLOR_PAIR(1));
+        printw("%llu ", goals[i]);
+        attroff(COLOR_PAIR(1));
+        match = 0;
+      }
+    }
+    printw("\n");
     value++;
     increment(countersCopy, goalsCopy, value);
-    printRow(countersCopy, goalsCopy, value);
   }
   refresh();
 }
